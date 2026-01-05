@@ -1,0 +1,313 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Primary Colors */
+    --color-primary: #2563eb; /* blue-600 - Medical authority with approachable confidence */
+    --color-primary-foreground: #ffffff; /* white - Ensures WCAG AA contrast */
+
+    /* Secondary Colors */
+    --color-secondary: #0f766e; /* teal-700 - Healing growth and stability */
+    --color-secondary-foreground: #ffffff; /* white - Ensures WCAG AA contrast */
+
+    /* Accent Colors */
+    --color-accent: #f59e0b; /* amber-500 - Optimistic energy for positive health actions */
+    --color-accent-foreground: #1e293b; /* slate-800 - Dark text for contrast */
+
+    /* Background Colors */
+    --color-background: #fefefe; /* gray-50 - Clean medical environment foundation */
+    --color-foreground: #1e293b; /* slate-800 - Clear readability for medical content */
+
+    /* Surface Colors */
+    --color-card: #f8fafc; /* slate-50 - Subtle depth for card-based information */
+    --color-card-foreground: #1e293b; /* slate-800 - Clear text on cards */
+
+    --color-popover: #ffffff; /* white - Clean popover background */
+    --color-popover-foreground: #1e293b; /* slate-800 - Readable popover text */
+
+    /* Muted Colors */
+    --color-muted: #f1f5f9; /* slate-100 - Subtle background variation */
+    --color-muted-foreground: #64748b; /* slate-500 - Supportive hierarchy without strain */
+
+    /* Destructive/Error Colors */
+    --color-destructive: #dc2626; /* red-600 - Clear concern with helpful guidance */
+    --color-destructive-foreground: #ffffff; /* white - High contrast for alerts */
+
+    --color-error: #dc2626; /* red-600 - Clear concern with helpful guidance */
+    --color-error-foreground: #ffffff; /* white - High contrast for error messages */
+
+    /* Success Colors */
+    --color-success: #059669; /* emerald-600 - Health improvement celebration */
+    --color-success-foreground: #ffffff; /* white - Clear success messaging */
+
+    /* Warning Colors */
+    --color-warning: #d97706; /* amber-600 - Attention without medical alarm */
+    --color-warning-foreground: #ffffff; /* white - Clear warning text */
+
+    /* Border & Input Colors */
+    --color-border: #e2e8f0; /* slate-200 - Minimal borders for clarity */
+    --color-input: #e2e8f0; /* slate-200 - Form input borders */
+    --color-ring: #2563eb; /* blue-600 - Focus ring matching primary */
+
+    /* Additional Semantic Colors */
+    --color-info: #0ea5e9; /* sky-500 - Action motivation with health optimism */
+    --color-info-foreground: #ffffff; /* white - Clear info text */
+
+    /* Health Gradient Variables */
+    --health-primary: #2563eb; /* blue-600 - Starting gradient color */
+    --health-secondary: #059669; /* emerald-600 - Ending gradient color */
+
+    /* Typography */
+    --font-headline: "Inter", sans-serif;
+    --font-body: "Inter", sans-serif;
+    --font-accent: "JetBrains Mono", monospace;
+
+    /* Spacing */
+    --spacing-base: 8px;
+    --spacing-xs: 12px;
+    --spacing-sm: 20px;
+    --spacing-md: 32px;
+    --spacing-lg: 48px;
+
+    /* Border Radius */
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-full: 9999px;
+
+    /* Shadows */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.05);
+    --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+    /* Transitions */
+    --transition-base: 300ms ease-out;
+    --transition-slow: 400ms ease-out;
+    --transition-spring: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    --transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .dark {
+    /* Primary Colors - Dark Mode */
+    --color-primary: #3b82f6; /* blue-500 - Brighter for dark backgrounds */
+    --color-primary-foreground: #ffffff; /* white - Maintains contrast */
+
+    /* Secondary Colors - Dark Mode */
+    --color-secondary: #14b8a6; /* teal-500 - Brighter healing color */
+    --color-secondary-foreground: #ffffff; /* white - Clear contrast */
+
+    /* Accent Colors - Dark Mode */
+    --color-accent: #fbbf24; /* amber-400 - Brighter optimistic energy */
+    --color-accent-foreground: #0f172a; /* slate-900 - Dark text for contrast */
+
+    /* Background Colors - Dark Mode */
+    --color-background: #0a0a0a; /* near-black - Dark medical environment */
+    --color-foreground: #f1f5f9; /* slate-100 - Light text for readability */
+
+    /* Surface Colors - Dark Mode */
+    --color-card: #1e293b; /* slate-800 - Elevated dark surface */
+    --color-card-foreground: #f1f5f9; /* slate-100 - Light text on cards */
+
+    --color-popover: #1e293b; /* slate-800 - Dark popover background */
+    --color-popover-foreground: #f1f5f9; /* slate-100 - Light popover text */
+
+    /* Muted Colors - Dark Mode */
+    --color-muted: #334155; /* slate-700 - Subtle dark variation */
+    --color-muted-foreground: #94a3b8; /* slate-400 - Muted text in dark mode */
+
+    /* Destructive/Error Colors - Dark Mode */
+    --color-destructive: #ef4444; /* red-500 - Brighter error for visibility */
+    --color-destructive-foreground: #ffffff; /* white - High contrast */
+
+    --color-error: #ef4444; /* red-500 - Brighter error indication */
+    --color-error-foreground: #ffffff; /* white - Clear error text */
+
+    /* Success Colors - Dark Mode */
+    --color-success: #10b981; /* emerald-500 - Brighter success indication */
+    --color-success-foreground: #ffffff; /* white - Clear success text */
+
+    /* Warning Colors - Dark Mode */
+    --color-warning: #f59e0b; /* amber-500 - Brighter warning */
+    --color-warning-foreground: #ffffff; /* white - Clear warning text */
+
+    /* Border & Input Colors - Dark Mode */
+    --color-border: #334155; /* slate-700 - Subtle dark borders */
+    --color-input: #334155; /* slate-700 - Dark input borders */
+    --color-ring: #3b82f6; /* blue-500 - Brighter focus ring */
+
+    /* Additional Semantic Colors - Dark Mode */
+    --color-info: #0ea5e9; /* sky-500 - Consistent info color */
+    --color-info-foreground: #ffffff; /* white - Clear info text */
+
+    /* Health Gradient Variables - Dark Mode */
+    --health-primary: #3b82f6; /* blue-500 - Brighter gradient start */
+    --health-secondary: #10b981; /* emerald-500 - Brighter gradient end */
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-body);
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-headline);
+  }
+}
+
+@layer components {
+  /* Health Gradient System */
+  .health-gradient {
+    background: linear-gradient(
+      135deg,
+      var(--health-primary),
+      var(--health-secondary)
+    );
+    transition: background 0.8s ease-in-out;
+  }
+
+  /* Organic Medical Icons */
+  .medical-icon {
+    stroke-width: 1.5px;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: stroke-dasharray 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Cultural Pattern Background */
+  .cultural-pattern {
+    position: relative;
+  }
+
+  .cultural-pattern::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%232563EB' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    opacity: 0.03;
+    pointer-events: none;
+  }
+
+  /* Trust Signal Glow */
+  .trust-glow {
+    box-shadow: 0 0 20px rgba(37, 99, 235, 0.15);
+    transition: box-shadow var(--transition-base);
+  }
+
+  .trust-glow:hover {
+    box-shadow: 0 0 30px rgba(37, 99, 235, 0.25);
+  }
+
+  /* Health Score Animation */
+  .health-score-ring {
+    transition: stroke-dashoffset var(--transition-slow)
+      var(--transition-spring);
+  }
+
+  /* Micro-interaction Lift */
+  .lift-on-hover {
+    transition: transform var(--transition-base),
+      box-shadow var(--transition-base);
+  }
+
+  .lift-on-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  /* Pulse Animation for Urgency */
+  @keyframes pulse-subtle {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.8;
+    }
+  }
+
+  .pulse-subtle {
+    animation: pulse-subtle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  /* Smooth Height Transitions */
+  .smooth-height {
+    transition: height var(--transition-base), max-height var(--transition-base);
+  }
+
+  /* RTL Support */
+  [dir="rtl"] {
+    direction: rtl;
+  }
+
+  [dir="ltr"] {
+    direction: ltr;
+  }
+}
+
+@layer utilities {
+  /* Spacing Utilities */
+  .spacing-base {
+    padding: var(--spacing-base);
+  }
+
+  .spacing-xs {
+    padding: var(--spacing-xs);
+  }
+
+  .spacing-sm {
+    padding: var(--spacing-sm);
+  }
+
+  .spacing-md {
+    padding: var(--spacing-md);
+  }
+
+  .spacing-lg {
+    padding: var(--spacing-lg);
+  }
+
+  /* Text Utilities */
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Focus Visible */
+  .focus-ring {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
+  }
+
+  /* Scrollbar Styling */
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: var(--color-muted);
+    border-radius: var(--radius-full);
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: var(--color-muted-foreground);
+    border-radius: var(--radius-full);
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: var(--color-primary);
+  }
+}
