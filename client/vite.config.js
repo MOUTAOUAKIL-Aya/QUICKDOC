@@ -22,7 +22,7 @@ export default defineConfig({
     open: true,
     proxy: {    // ← AJOUTEZ ce proxy
       '/api': {
-        target: 'http://localhost:5000',
+        target: 'http://localhost:5000', //mon backend express
         changeOrigin: true,
         secure: false,
       }
