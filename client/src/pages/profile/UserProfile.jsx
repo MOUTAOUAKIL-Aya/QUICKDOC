@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; // ← Enlève useEffect
+import React, { useState, useEffect } from 'react'; // ← Ajoutez useEffect
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import Header from '../../components/ui/Header';
@@ -8,13 +8,91 @@ import Icon from '../../components/AppIcon';
 
 function UserProfile() {
   const { user } = useAuth();
-  
-  // ✅ Initialisation directe avec une fonction
-  const [profile] = useState(() => {
-    const savedProfile = localStorage.getItem('userProfile');
-    return savedProfile ? JSON.parse(savedProfile) : null;
-  });
+  const [profile, setProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    const loadProfile = async () => {
+      try {
+        // 1. Vérifier localStorage avec la bonne clé 'user'
+        const savedUser = localStorage.getItem('user');
+        
+        if (savedUser) {
+          const parsedUser = JSON.parse(savedUser);
+          console.log('📦 User depuis localStorage:', parsedUser);
+          
+          // Vérifier si le profil est complet
+          if (parsedUser.profileComplete || 
+              parsedUser.smokingStatus || 
+              parsedUser.exerciseFrequency) {
+            setProfile(parsedUser);
+            setLoading(false);
+            return;
+          }
+        }
+        
+        // 2. Vérifier le contexte Auth
+        if (user && (user.profileComplete || user.smokingStatus)) {
+          console.log('👤 User depuis AuthContext:', user);
+          setProfile(user);
+          setLoading(false);
+          return;
+        }
+
+
+         // 3. Récupérer depuis l'API si connecté
+      const token = localStorage.getItem('token');
+      if (token) {
+        console.log('🔄 Récupération depuis API...');
+        try {
+          const response = await fetch('/api/profile', {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          });
+          
+          if (response.ok) {
+            const data = await response.json();
+            if (data.success && data.user) {
+              console.log('📥 Données fraîches API:', data.user);
+              setProfile(data.user);
+              localStorage.setItem('user', JSON.stringify(data.user));
+              setLoading(false);
+              return;
+            }
+          } else {
+            console.warn('⚠️ API response not OK:', response.status);
+          }
+        } catch (apiError) {
+          console.warn('⚠️ API non disponible:', apiError.message);
+          // Continuer sans erreur
+        }
+      }
+
+        // 3. Si rien trouvé
+        setProfile(null);
+        
+      } catch (error) {
+        console.error('❌ Erreur chargement profil:', error);
+        setProfile(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadProfile();
+  }, [user]); // Recharge quand user change
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <Icon name="Loader" size={32} className="animate-spin mx-auto mb-4 text-primary" />
+          <p className="text-muted-foreground">Loading profile...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!profile) {
     return (
@@ -44,7 +122,7 @@ function UserProfile() {
     <div className="min-h-screen bg-background">
       <Header />
       
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-20">
         {/* Header du profil */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-6">
@@ -74,8 +152,8 @@ function UserProfile() {
                     <Icon name="User" size={48} className="text-muted-foreground" />
                   </div>
                 )}
-                <h2 className="text-xl font-bold text-foreground mt-4">{user?.name}</h2>
-                <p className="text-sm text-muted-foreground">{user?.email}</p>
+                <h2 className="text-xl font-bold text-foreground mt-4">{profile.name || user?.name}</h2>
+                <p className="text-sm text-muted-foreground">{profile.email || user?.email}</p>
               </div>
 
               {/* Informations de base */}
@@ -197,8 +275,8 @@ function UserProfile() {
                   Current Medications
                 </h3>
                 <div className="space-y-3">
-                  {profile.currentMedications.map((med) => (
-                    <div key={med.id} className="flex items-center gap-4 p-4 bg-background rounded-lg">
+                  {profile.currentMedications.map((med,id) => (
+                    <div key={id} className="flex items-center gap-4 p-4 bg-background rounded-lg">
                       <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
                         <Icon name="Pill" size={20} className="text-primary" />
                       </div>
@@ -222,8 +300,8 @@ function UserProfile() {
                   Vaccination History
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  {profile.vaccines.map((vac) => (
-                    <div key={vac.id} className="flex items-center gap-3 p-3 bg-background rounded-lg">
+                  {profile.vaccines.map((vac,id) => (
+                    <div key={id} className="flex items-center gap-3 p-3 bg-background rounded-lg">
                       <div className="w-8 h-8 rounded-full bg-success/10 flex items-center justify-center">
                         <Icon name="Check" size={16} className="text-success" />
                       </div>

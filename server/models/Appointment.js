@@ -7,9 +7,15 @@ const appointmentSchema = new mongoose.Schema({
     required: true
   },
   doctor: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.Mixed,
     ref: 'User',
     required: true
+  },
+  doctorInfo: { 
+    name: String,
+    specialization: String,
+    isMock: Boolean,
+    originalId: mongoose.Schema.Types.Mixed
   },
   date: {
     type: Date,
@@ -21,8 +27,8 @@ const appointmentSchema = new mongoose.Schema({
   },
   type: {
     type: String,
-    enum: ['video', 'in-person', 'phone'],
-    default: 'video'
+    enum: ['video', 'in-person', 'chat'],
+    required: true
   },
   reason: String,
   symptoms: String,

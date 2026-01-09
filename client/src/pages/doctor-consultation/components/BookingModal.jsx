@@ -13,6 +13,7 @@ const BookingModal = ({ doctor, onClose, onConfirmBooking }) => {
   const [reason, setReason] = useState('');
   const [isUrgent, setIsUrgent] = useState(false);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const dateOptions = [
     { value: '2025-12-19', label: 'Today - December 19, 2025' },
@@ -38,20 +39,73 @@ const BookingModal = ({ doctor, onClose, onConfirmBooking }) => {
     { value: 'in-person', label: 'In-Person Visit' }
   ];
 
-  const handleSubmit = (e) => {
-    e?.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
     if (!selectedDate || !selectedTime || !agreedToTerms) {
+      alert('Please fill in all required fields and agree to the terms.');
       return;
     }
+    
+    setIsSubmitting(true);
+    
+    try {
+      const token = localStorage.getItem('token');
+      
+      if (!token) {
+        alert('Please log in first');
+        setIsSubmitting(false);
+        return;
+      }
+      
+      const appointmentData = {
+        doctorId: doctor.id,
+        doctorName: doctor.name,
+        doctorSpecialization: doctor.specialization,
+        date: selectedDate,
+        time: selectedTime,
+        type: consultationType,
+        reason: reason,
+        symptoms: '',
+        isUrgent: isUrgent
+      };
+      
+      console.log('📤 Envoi des données:', appointmentData);
+      
+      const response = await fetch('/api/appointments', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(appointmentData)
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.message || 'Erreur lors de la réservation');
+      }
+      
+      if (onConfirmBooking) {
     onConfirmBooking({
-      doctor,
-      date: selectedDate,
-      time: selectedTime,
-      consultationType,
-      reason,
-      isUrgent
-    });
-  };
+    success: true,
+    message: 'Appointment created successfully',
+    appointment: data.appointment,
+    doctor: doctor
+  });
+}
+      
+      alert('✅ Rendez-vous créé avec succès !');
+      onClose();
+      
+    } catch (error) {
+      console.error('💥 Erreur:', error);
+      alert(error.message || 'Erreur lors de la réservation');
+    } finally {
+      setIsSubmitting(false);
+    }
+  }; 
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm">
@@ -61,6 +115,7 @@ const BookingModal = ({ doctor, onClose, onConfirmBooking }) => {
           <button
             onClick={onClose}
             className="p-2 hover:bg-muted rounded-md transition-colors"
+            disabled={isSubmitting}
           >
             <Icon name="X" size={20} />
           </button>
@@ -102,6 +157,7 @@ const BookingModal = ({ doctor, onClose, onConfirmBooking }) => {
               value={selectedDate}
               onChange={setSelectedDate}
               required
+              disabled={isSubmitting}
             />
 
             <Select
@@ -111,6 +167,7 @@ const BookingModal = ({ doctor, onClose, onConfirmBooking }) => {
               onChange={setSelectedTime}
               required
               description="Prayer times will be automatically avoided"
+              disabled={isSubmitting}
             />
 
             <Select
@@ -119,6 +176,7 @@ const BookingModal = ({ doctor, onClose, onConfirmBooking }) => {
               value={consultationType}
               onChange={setConsultationType}
               required
+              disabled={isSubmitting}
             />
 
             <Input
@@ -128,6 +186,7 @@ const BookingModal = ({ doctor, onClose, onConfirmBooking }) => {
               value={reason}
               onChange={(e) => setReason(e?.target?.value)}
               description="This helps the doctor prepare for your consultation"
+              disabled={isSubmitting}
             />
 
             <Checkbox
@@ -135,6 +194,7 @@ const BookingModal = ({ doctor, onClose, onConfirmBooking }) => {
               description="Urgent consultations may incur additional fees"
               checked={isUrgent}
               onChange={(e) => setIsUrgent(e?.target?.checked)}
+              disabled={isSubmitting}
             />
 
             <div className="p-4 bg-info/10 border border-info/20 rounded-lg">
@@ -158,6 +218,7 @@ const BookingModal = ({ doctor, onClose, onConfirmBooking }) => {
               checked={agreedToTerms}
               onChange={(e) => setAgreedToTerms(e?.target?.checked)}
               required
+              disabled={isSubmitting}
             />
 
             <div className="flex gap-3 pt-4 border-t border-border">
@@ -166,6 +227,7 @@ const BookingModal = ({ doctor, onClose, onConfirmBooking }) => {
                 variant="outline"
                 fullWidth
                 onClick={onClose}
+                disabled={isSubmitting}
               >
                 Cancel
               </Button>
@@ -175,9 +237,9 @@ const BookingModal = ({ doctor, onClose, onConfirmBooking }) => {
                 fullWidth
                 iconName="Calendar"
                 iconPosition="left"
-                disabled={!selectedDate || !selectedTime || !agreedToTerms}
+                disabled={!selectedDate || !selectedTime || !agreedToTerms || isSubmitting}
               >
-                Confirm Booking
+                {isSubmitting ? 'Processing...' : 'Confirm Booking'}
               </Button>
             </div>
           </form>

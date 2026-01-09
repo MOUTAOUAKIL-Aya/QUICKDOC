@@ -120,43 +120,40 @@ const Header = () => {
                   <span>{user.name}</span>
                   <Icon name="ChevronDown" size={16} />
                 </button>
-                <div className="absolute right-0 mt-2 w-48 bg-white border border-border rounded-lg shadow-lg opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-opacity">
-                  {!profileCompleted && (
-                    <Link
-                      to="/complete-profile"
-                      className="block px-4 py-2 text-sm hover:bg-primary/10"
-                    >
-                      Complete Profile
-                    </Link>
-                  )}
+              <div className="absolute right-0 mt-2 w-48 bg-white border border-border rounded-lg shadow-lg z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                {!profileCompleted && (
                   <Link
-                    to="/profile"
-                    className="block px-4 py-2 text-sm hover:bg-primary/10"
+                    to="/complete-profile"
+                    className="block px-4 py-3 text-sm text-foreground hover:bg-primary/10 hover:text-primary transition-colors border-b border-border"
                   >
-                    Profile
+                    Complete Profile
                   </Link>
-                  <Link
-                    to="/settings"
-                    className="block px-4 py-2 text-sm hover:bg-primary/10"
-                  >
-                    Settings
-                  </Link>
-                  <button
-                    onClick={signOut}
-                    className="w-full text-left px-4 py-2 text-sm hover:bg-red-100 text-red-600"
-                  >
-                    Sign Out
-                  </button>
-                </div>
+                )}
+                <Link
+                  to="/profile"
+                  className="block px-4 py-3 text-sm text-foreground hover:bg-primary/10 hover:text-primary transition-colors border-b border-border"
+                >
+                  Profile
+                </Link>
+
+                <button
+                  onClick={signOut}
+                  className="w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 hover:text-red-700 transition-colors"
+                >
+                  Sign Out
+                </button>
               </div>
+            </div>
             )}
 
             <Button variant="ghost" size="icon" className="hidden lg:flex">
               <Icon name="Bell" size={20} />
             </Button>
-            <Button variant="default" className="hidden lg:flex">
-              Book Consultation
-            </Button>
+            <Link to="/doctor-consultation">
+              <Button variant="default" className="hidden lg:flex">
+                Book Consultation
+              </Button>
+            </Link>
             <button
               onClick={toggleMobileMenu}
               className="lg:hidden p-2 rounded-md hover:bg-muted transition-colors"

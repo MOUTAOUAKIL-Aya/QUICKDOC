@@ -16,6 +16,10 @@ import SignIn from "./pages/auth/SignIn";
 import SignUp from "./pages/auth/SignUp";
 import CompleteProfile from "pages/auth/CompleteProfile";
 
+import AppointmentsPage from './pages/appointments/index.jsx';
+import ArticleDetailPage from './pages/health-dashboard_homepage/components/ArticleDetailPage';
+
+
 const Routes = () => {
   return (
     <BrowserRouter>
@@ -98,6 +102,35 @@ const Routes = () => {
               element={
                 <ProtectedRoute requireAuth={true} requireCompleteProfile={true}>
                   <DoctorConsultation />
+                </ProtectedRoute>
+              } 
+            />
+
+            <Route 
+              path="/appointments" 
+              element={
+                <ProtectedRoute requireAuth={true} requireCompleteProfile={true}>
+                  <AppointmentsPage />
+                </ProtectedRoute>
+              } 
+            />
+
+              {/* ✅ NOUVELLE ROUTE POUR LES ARTICLES DÉTAILLÉS */}
+            <Route 
+              path="/article/:id" 
+              element={
+                <ProtectedRoute requireAuth={true} requireCompleteProfile={true}>
+                  <ArticleDetailPage />
+                </ProtectedRoute>
+              } 
+            />
+            
+            {/* Optionnel : Route pour la liste de tous les articles */}
+            <Route 
+              path="/health-tips" 
+              element={
+                <ProtectedRoute requireAuth={true} requireCompleteProfile={true}>
+                  <div>Page de tous les articles (à créer)</div>
                 </ProtectedRoute>
               } 
             />

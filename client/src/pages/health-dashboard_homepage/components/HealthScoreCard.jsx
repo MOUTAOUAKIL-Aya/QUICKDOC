@@ -1,7 +1,38 @@
 import React from 'react';
 import Icon from '../../../components/AppIcon';
+import { Link } from 'react-router-dom'; // IMPORTANT: Ajoutez cette importation
 
-const HealthScoreCard = ({ score, trend, lastUpdated }) => {
+const HealthScoreCard = ({ score, trend, lastUpdated, showCompletionMessage = false }) => {
+  
+  // Si pas assez de données, afficher le message pour compléter le profil
+  if (showCompletionMessage) {
+    return (
+      <div className="bg-card rounded-xl border border-border p-6 shadow-sm lift-on-hover">
+        <div className="flex items-start gap-4">
+          <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+            <Icon name="AlertCircle" size={24} color="var(--color-primary)" />
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold text-foreground mb-2">
+              Profil incomplet
+            </h3>
+            <p className="text-muted-foreground mb-4">
+              Ajoutez votre poids, taille ou informations médicales pour obtenir votre score de santé personnalisé.
+            </p>
+            <Link
+              to="/profile"
+              className="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-medium transition-colors"
+            >
+              <span>Compléter mon profil</span>
+              <Icon name="ArrowRight" size={16} />
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Fonctions pour le score (gardez vos fonctions existantes)
   const getScoreColor = (score) => {
     if (score >= 80) return 'text-success';
     if (score >= 60) return 'text-warning';
@@ -14,6 +45,7 @@ const HealthScoreCard = ({ score, trend, lastUpdated }) => {
     return 'bg-destructive/10';
   };
 
+  // Calculs pour le cercle de progression
   const circumference = 2 * Math.PI * 45;
   const strokeDashoffset = circumference - (score / 100) * circumference;
 
@@ -25,7 +57,15 @@ const HealthScoreCard = ({ score, trend, lastUpdated }) => {
           <p className="text-sm text-muted-foreground">Last updated: {lastUpdated}</p>
         </div>
         <div className={`p-2 rounded-lg ${getScoreBgColor(score)}`}>
-          <Icon name="Activity" size={20} color={score >= 80 ? 'var(--color-success)' : score >= 60 ? 'var(--color-warning)' : 'var(--color-destructive)'} />
+          <Icon 
+            name="Activity" 
+            size={20} 
+            color={
+              score >= 80 ? 'var(--color-success)' : 
+              score >= 60 ? 'var(--color-warning)' : 
+              'var(--color-destructive)'
+            } 
+          />
         </div>
       </div>
 
@@ -55,7 +95,9 @@ const HealthScoreCard = ({ score, trend, lastUpdated }) => {
             />
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className={`text-4xl font-bold ${getScoreColor(score)}`}>{score}</span>
+            <span className={`text-4xl font-bold ${getScoreColor(score)}`}>
+              {score || 0}
+            </span>
             <span className="text-sm text-muted-foreground">out of 100</span>
           </div>
         </div>
@@ -65,10 +107,20 @@ const HealthScoreCard = ({ score, trend, lastUpdated }) => {
         <Icon 
           name={trend === 'up' ? 'TrendingUp' : trend === 'down' ? 'TrendingDown' : 'Minus'} 
           size={16} 
-          color={trend === 'up' ? 'var(--color-success)' : trend === 'down' ? 'var(--color-destructive)' : 'var(--color-muted-foreground)'} 
+          color={
+            trend === 'up' ? 'var(--color-success)' : 
+            trend === 'down' ? 'var(--color-destructive)' : 
+            'var(--color-muted-foreground)'
+          } 
         />
-        <span className={`text-sm font-medium ${trend === 'up' ? 'text-success' : trend === 'down' ? 'text-destructive' : 'text-muted-foreground'}`}>
-          {trend === 'up' ? '+5 points this week' : trend === 'down' ? '-3 points this week' : 'No change'}
+        <span className={`text-sm font-medium ${
+          trend === 'up' ? 'text-success' : 
+          trend === 'down' ? 'text-destructive' : 
+          'text-muted-foreground'
+        }`}>
+          {trend === 'up' ? '+5 points this week' : 
+           trend === 'down' ? '-3 points this week' : 
+           'No change'}
         </span>
       </div>
     </div>
